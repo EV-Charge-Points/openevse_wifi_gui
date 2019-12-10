@@ -5,11 +5,11 @@
 <head>
 
   <meta charset="utf-8">
-  <title>OpenEVSE</title>
+  <title>EVCP</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="viewport" content="width=device-width, user-scalable=no" />
-  <meta name="description" content="OpenEVSE">
-  <meta name="author" content="OpenEVSE">
+  <meta name="description" content="EVCP Setup and management">
+  <meta name="author" content="EV Charge Point">
   <meta name="theme-color" content="#000000" />
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
@@ -20,8 +20,7 @@
 <body>
   <div id="page">
     <div class="header">
-      <h1>Open<span>EVSE</span></h1>
-      <h3>WiFi</h3>
+      <img src="logo.png" alt="EV Charge Point" width="100" height="56">
     </div>
 
     <div class="container" data-bind="visible: !initialised()">
@@ -32,11 +31,11 @@
 
       <div class="tabs">
         <input id="tab-3" type="radio" name="tab-group" data-bind="checked: tab" value="status" />
-        <label for="tab-3">OpenEVSE</label>
+        <label for="tab-3">Charge Point</label>
         <input id="tab-1" type="radio" name="tab-group" data-bind="checked: tab" value="system" />
         <label for="tab-1">System</label>
         <input id="tab-2" type="radio" name="tab-group" data-bind="checked: tab" value="services" />
-        <label for="tab-2">Services</label>
+        <label for="tab-2" data-bind="visible: developerMode()">Services</label>
         <input id="tab-4" type="radio" name="tab-group" data-bind="checked: tab" value="rapi" />
         <label for="tab-4" data-bind="visible: developerMode() &amp;&amp; status.rapi_connected()">RAPI</label>
       </div>
@@ -53,7 +52,7 @@
                 <b>Successful packets:</b><br>
                 <span data-bind="text: status.packets_success"></span> of <span data-bind="text: status.packets_sent"></span>
               </p>
-              <p><b>OpenEVSE</b></p>
+              <p><b>EVCP</b></p>
               <p><b>RAPI packets:</b><br><span data-bind="text: status.comm_success"></span> of <span data-bind="text: status.comm_sent"></span></p>
             </div>
 
@@ -76,7 +75,7 @@
                 <b>Successful packets:</b><br>
                 <span data-bind="text: status.packets_success"></span> of <span data-bind="text: status.packets_sent"></span>
               </p>
-              <p><b>OpenEVSE</b></p>
+              <p><b>EVCP</b></p>
               <p><b>RAPI packets:</b><br><span data-bind="text: status.comm_success"></span> of <span data-bind="text: status.comm_sent"></span></p>
               <button id="apoff" data-bind="visible: status.isWifiAccessPoint, click: wifi.turnOffAccessPoint, disable: wifi.turnOffAccessPointFetching">Turn off Access Point</button>
             </div>
@@ -247,18 +246,18 @@
               <div>
                 Status published to:<br/>
                 <span class="small-text">{base-topic}/{status} value</span><br>
-                <span class="small-text">e.g. <span data-bind="text: '' !== config.mqtt_topic() ? config.mqtt_topic() : 'openevse'"></span>/amp 16</span><br>
+                <span class="small-text">e.g. <span data-bind="text: '' !== config.mqtt_topic() ? config.mqtt_topic() : 'EVCP'"></span>/amp 16</span><br>
               </div>
               <p>
                 RAPI control subscribes to:<br/>
                 <span class="small-text">{base-topic}/rapi/in/{command} value</span><br>
-                <span class="small-text">e.g. <span data-bind="text: '' !== config.mqtt_topic() ? config.mqtt_topic() : 'openevse'"></span>/rapi/in/$SC 16</span><br>
-                <span class="small-text">e.g. <span data-bind="text: '' !== config.mqtt_topic() ? config.mqtt_topic() : 'openevse'"></span>/rapi/in/$GC</span><br>
+                <span class="small-text">e.g. <span data-bind="text: '' !== config.mqtt_topic() ? config.mqtt_topic() : 'EVCP'"></span>/rapi/in/$SC 16</span><br>
+                <span class="small-text">e.g. <span data-bind="text: '' !== config.mqtt_topic() ? config.mqtt_topic() : 'EVCP'"></span>/rapi/in/$GC</span><br>
               </p>
               <p>
                 RAPI response published to:<br/>
                 <span class="small-text">{base-topic}/rapi/out response</span><br>
-                <span class="small-text">e.g. <span data-bind="text: '' !== config.mqtt_topic() ? config.mqtt_topic() : 'openevse'"></span>/rapi/out $OK 6 32</span><br>
+                <span class="small-text">e.g. <span data-bind="text: '' !== config.mqtt_topic() ? config.mqtt_topic() : 'EVCP'"></span>/rapi/out $OK 6 32</span><br>
               </p>
             </div>
             <p data-bind="visible: config.mqtt_enabled">
@@ -298,7 +297,7 @@
             <p data-bind="visible: config.mqtt_enabled">
               <b>Base-topic*:</b><br>
               <input data-bind="textInput: config.mqtt_topic" type="text" autocapitalize="none"><br/>
-              <span class="small-text">e.g 'openevse'</span>
+              <span class="small-text">e.g 'EVCP'</span>
             </p>
 
             <h2 data-bind="visible: config.mqtt_enabled">Solar PV divert<span class="info" data-bind="click: toggle.bind($data, showSolarDivert)"></span></h2>
@@ -368,7 +367,7 @@
         </div>
         <!--end TAB 2-->
 
-        <!--TAB 3: OpenEVSE -->
+        <!--TAB 3: Charge Point -->
         <div id="content-3" data-bind="visible: isStatus">
 
           <!-- Session Status -->
@@ -379,7 +378,7 @@
 
           <div data-bind="visible: !status.rapi_connected()" class="box box-full left error">
             <h4>EVSE Error</h4>
-            <span>OpenEVSE not responding or not connected</span>
+            <span>EVCP not responding or not connected</span>
           </div>
 
           <div data-bind="visible: !openevse.isError() &amp;&amp; status.rapi_connected(),
@@ -735,7 +734,7 @@
             <h2>Hardware</h2>
             <table>
               <tr>
-                <th>OpenEVSE</th>
+                <th>EVCP</th>
                 <th></th>
               </tr>
               <tr>
@@ -752,7 +751,7 @@
                 </td>
               </tr>
               <tr>
-                <th>OpenEVSE WiFi</th>
+                <th>EVCP WiFi</th>
                 <th></th>
               </tr>
               <tr>
