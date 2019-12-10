@@ -1,4 +1,4 @@
-/* global $, ko, ConfigViewModel, StatusViewModel, RapiViewModel, WiFiScanViewModel, WiFiConfigViewModel, OpenEvseViewModel */
+/* global $, ko, ConfigViewModel, StatusViewModel, RapiViewModel, WiFiScanViewModel, WiFiConfigViewModel, OpenEvseViewModel, PasswordViewModel */
 /* exported OpenEvseWiFiViewModel */
 
 function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
@@ -41,22 +41,20 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
   self.updating = ko.observable(false);
   self.scanUpdating = ko.observable(false);
 
-  self.bssid = ko.observable("");
-  self.bssid.subscribe(function (bssid) {
-    for(var i = 0; i < self.scan.results().length; i++) {
-      var net = self.scan.results()[i];
-      if(bssid === net.bssid()) {
-        self.config.ssid(net.ssid());
-        return;
-      }
+  self.wifi.selectedNet.subscribe((net) => {
+    if(false !== net) {
+      self.config.ssid(net.ssid());
     }
+  });
+
+  self.config.ssid.subscribe((ssid) => {
+    self.wifi.setSsid(ssid);
   });
 
   // Info text display state
   self.showMqttInfo = ko.observable(false);
   self.showSolarDivert = ko.observable(false);
   self.showSafety = ko.observable(false);
-
 
   self.toggle = function (flag) {
     flag(!flag());
@@ -100,6 +98,12 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
   // Upgrade URL
   self.upgradeUrl = ko.observable("about:blank");
 
+  // Show/hide password state
+  self.wifiPassword = new PasswordViewModel(self.config.pass);
+  self.emoncmsApiKey = new PasswordViewModel(self.config.emoncms_apikey);
+  self.mqttPassword = new PasswordViewModel(self.config.mqtt_pass);
+  self.wwwPassword = new PasswordViewModel(self.config.www_password);
+
   // -----------------------------------------------------------------------
   // Initialise the app
   // -----------------------------------------------------------------------
@@ -124,23 +128,19 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
             window.location.replace("http://" + self.status.ipaddress() + ":" + self.basePort());
           }
         }
-        self.openevse.update(function () {
-          self.initialised(true);
-          updateTimer = setTimeout(self.update, updateTime);
-
-          // Load the upgrade frame
-          self.upgradeUrl(self.baseEndpoint() + "/update");
-
-          // Load the images
-          var imgDefer = document.getElementsByTagName("img");
-          for (var i=0; i<imgDefer.length; i++) {
-            if(imgDefer[i].getAttribute("data-src")) {
-              imgDefer[i].setAttribute("src", imgDefer[i].getAttribute("data-src"));
+        if(self.status.rapi_connected()) {
+          self.openevse.update(self.finishedStarting);
+        } else {
+          self.finishedStarting();
+          self.status.rapi_connected.subscribe((val) => {
+            if(val) {
+              self.config.update(() => {
+                self.openevse.update(() => {
+                });
+              });
             }
-          }
-
-          self.updating(false);
-        });
+          });
+        }
       });
       self.connect();
     });
@@ -148,6 +148,24 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
     // Set the advanced and developer modes from Cookies
     self.advancedMode(self.getCookie("advancedMode", "false") === "true");
     self.developerMode(self.getCookie("developerMode", "false") === "true");
+  };
+
+  self.finishedStarting = function () {
+    self.initialised(true);
+    updateTimer = setTimeout(self.update, updateTime);
+
+    // Load the upgrade frame
+    self.upgradeUrl(self.baseEndpoint() + "/update");
+
+    // Load the images
+    var imgDefer = document.getElementsByTagName("img");
+    for (var i=0; i<imgDefer.length; i++) {
+      if(imgDefer[i].getAttribute("data-src")) {
+        imgDefer[i].setAttribute("src", imgDefer[i].getAttribute("data-src"));
+      }
+    }
+
+    self.updating(false);
   };
 
   // -----------------------------------------------------------------------
@@ -300,7 +318,7 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
 
     if (emoncms.enable && (emoncms.server === "" || emoncms.node === "")) {
       alert("Please enter Emoncms server and node");
-    } else if (emoncms.enable && emoncms.apikey.length !== 32 && emoncms.apikey !== "___DUMMY_PASSWORD___") {
+    } else if (emoncms.enable && emoncms.apikey.length !== 32 && !self.emoncmsApiKey.isDummy()) {
       alert("Please enter valid Emoncms apikey");
     } else if (emoncms.enable && emoncms.fingerprint !== "" && emoncms.fingerprint.length !== 59) {
       alert("Please enter valid SSL SHA-1 fingerprint");
