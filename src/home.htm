@@ -19,8 +19,36 @@
 
 <body>
   <div id="page">
-    <div class="header">
-      <img src="logo.png" alt="EV Charge Point" width="100" height="56">
+    <div class="navigation-bar coloured-nav homepage">
+      <div class="navigation-wrapper">
+        <div class="row basis-auto">
+          <div class="logo_col col-xs col-sm-fit">
+            <img src="logo.png" alt="EV Charge Point" width="100" height="56">
+          </div>
+          <div class="main_menu_col col-xs" data-bind="visible: initialised" style="display: none">
+            <div class="mainmenu_container">
+              <ul id="main_menu" class="active-line-bottom main-menu dropdown-menu">
+                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isStatus}">
+                  <a href="#status" data-bind="click: () => { tab('status') }">Charge Point</a>
+                </li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isSystem}">
+                  <a href="#system" data-bind="click: () => { tab('system') }">System</a>
+                </li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isServices}, visible: developerMode()">
+                  <a href="#services" data-bind="click: () => { tab('services') }">Services</a>
+                </li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isRapi}, visible: developerMode() &amp;&amp; status.rapi_connected()">
+                  <a href="#rapi" data-bind="click: () => { tab('rapi') }">RAPA</a>
+                </li>
+              </ul>
+            </div>
+            <a href="#" data-component="offcanvas" data-target="#offcanvas-wrapper" data-direction="right" data-width="300px" data-push="false" data-loaded="true">
+              <div class="bubble"></div>
+              <i class="fa fa-bars"></i>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="container" data-bind="visible: !initialised()">
@@ -28,17 +56,6 @@
     </div>
 
     <div class="container" data-bind="visible: initialised" style="display: none">
-
-      <div class="tabs">
-        <input id="tab-3" type="radio" name="tab-group" data-bind="checked: tab" value="status" />
-        <label for="tab-3">Charge Point</label>
-        <input id="tab-1" type="radio" name="tab-group" data-bind="checked: tab" value="system" />
-        <label for="tab-1">System</label>
-        <input id="tab-2" type="radio" name="tab-group" data-bind="checked: tab" value="services" />
-        <label for="tab-2" data-bind="visible: developerMode()">Services</label>
-        <input id="tab-4" type="radio" name="tab-group" data-bind="checked: tab" value="rapi" />
-        <label for="tab-4" data-bind="visible: developerMode() &amp;&amp; status.rapi_connected()">RAPI</label>
-      </div>
 
       <div id="content">
         <div id="content-1" data-bind="visible: isSystem">
@@ -69,7 +86,7 @@
                   </tr>
                 </tbody>
               </table>
-              <button data-bind="click: function () { wifi.forceConfig(true); }">Change WiFi network</button>
+              <button class="button color1 round" data-bind="click: function () { wifi.forceConfig(true); }">Change WiFi network</button class="button color1 round">
               <p><b>IP Address:</b><br><a data-bind="text: status.ipaddress, attr: {href: 'http://'+status.ipaddress()}"></a></p>
               <p>
                 <b>Successful packets:</b><br>
@@ -77,7 +94,7 @@
               </p>
               <p><b>EVCP</b></p>
               <p><b>RAPI packets:</b><br><span data-bind="text: status.comm_success"></span> of <span data-bind="text: status.comm_sent"></span></p>
-              <button id="apoff" data-bind="visible: status.isWifiAccessPoint, click: wifi.turnOffAccessPoint, disable: wifi.turnOffAccessPointFetching">Turn off Access Point</button>
+              <button class="button color1 round" id="apoff" data-bind="visible: status.isWifiAccessPoint, click: wifi.turnOffAccessPoint, disable: wifi.turnOffAccessPointFetching">Turn off Access Point</button class="button color1 round">
             </div>
 
             <div id="ap-view" data-bind="visible: wifi.canConfigure() &amp;&amp; !wifi.wifiConnecting() &amp;&amp; !status.isWired()">
@@ -109,7 +126,7 @@
                 </div>
               </p>
               <p>
-                <button data-bind="click: wifi.saveNetwork, text: (wifi.saveNetworkFetching() ? 'Saving' : (wifi.saveNetworkSuccess() ? 'Saved' : 'Connect')), disable: wifi.saveNetworkFetching">Connect</button>
+                <button class="button color1 round" data-bind="click: wifi.saveNetwork, text: (wifi.saveNetworkFetching() ? 'Saving' : (wifi.saveNetworkSuccess() ? 'Saved' : 'Connect')), disable: wifi.saveNetworkFetching">Connect</button class="button color1 round">
               </p>
             </div>
 
@@ -134,7 +151,7 @@
               </span><br />
               <span class="small-text validMessage">15 characters max</span><br>
               <span class="small-text">Web interface HTTP authentication.</span><br><br>
-              <button data-bind="click: saveAdmin, text: (saveAdminFetching() ? 'Saving' : (saveAdminSuccess() ? 'Saved' : 'Save')), disable: saveAdminFetching">Save</button>
+              <button class="button color1 round" data-bind="click: saveAdmin, text: (saveAdminFetching() ? 'Saving' : (saveAdminSuccess() ? 'Saved' : 'Save')), disable: saveAdminFetching">Save</button class="button color1 round">
             </p>
           </div>
 
@@ -144,8 +161,8 @@
             <p><b>Version: </b><span data-bind="text: config.version"></span></p>
             <div data-bind="visible: !updateFetching() && !updateComplete()">
               <form action="#" method="post" enctype="multipart/form-data" id="upload_form" data-bind="submit: otaUpdate">
-                <input type="file" name="update" data-bind="value: updateFilename">
-                <button data-bind="click: otaUpdate, text: (updateFetching() ? 'Updating...' : 'Update'), disable: ('' == updateFilename())">Update</button>
+                <input type="file" name="update" data-bind="value: updateFilename"><br/><br/>
+                <button class="button color1 round" data-bind="click: otaUpdate, text: (updateFetching() ? 'Updating...' : 'Update'), disable: ('' == updateFilename())">Update</button class="button color1 round">
               </form>
             </div>
             <div data-bind="visible: (updateError() !== '')" class="box error">
@@ -162,8 +179,8 @@
               Firmware update completed ok
             </div>
             <p>
-              <button data-bind="click: restart, text: (restartFetching() ? 'Restarting...' : 'Restart'), disable: restartFetching">Restart</button>
-              <button data-bind="click: factoryReset, text: (factoryResetFetching() ? 'Resetting...' : 'Factory Reset'), disable: factoryResetFetching">Factory Reset</button>
+              <button class="button color1 round" data-bind="click: restart, text: (restartFetching() ? 'Restarting...' : 'Restart'), disable: restartFetching">Restart</button class="button color1 round">
+              <button class="button color1 round" data-bind="click: factoryReset, text: (factoryResetFetching() ? 'Resetting...' : 'Factory Reset'), disable: factoryResetFetching">Factory Reset</button class="button color1 round">
             </p>
           </div>
 
@@ -175,7 +192,7 @@
               <span class="small-text validMessage">31 characters max</span>
             </p>
             <p>
-              <button data-bind="click: saveAdvanced, text: (saveAdvancedFetching() ? 'Saving' : (saveAdvancedSuccess() ? 'Saved' : 'Save')), disable: saveAdvancedFetching">Save</button>
+              <button class="button color1 round" data-bind="click: saveAdvanced, text: (saveAdvancedFetching() ? 'Saving' : (saveAdvancedSuccess() ? 'Saved' : 'Save')), disable: saveAdvancedFetching">Save</button class="button color1 round">
             </p>
           </div>
 
@@ -229,7 +246,7 @@
               </span>
             </p>
             <p>
-              <button data-bind="click: saveEmonCms, text: (saveEmonCmsFetching() ? 'Saving' : (saveEmonCmsSuccess() ? 'Saved' : 'Save')), disable: saveEmonCmsFetching">Save</button>
+              <button class="button color1 round" data-bind="click: saveEmonCms, text: (saveEmonCmsFetching() ? 'Saving' : (saveEmonCmsSuccess() ? 'Saved' : 'Save')), disable: saveEmonCmsFetching">Save</button class="button color1 round">
               <span data-bind="visible: config.emoncms_enabled"><b>&nbsp; Connected:&nbsp;<span data-bind="text: 1 === status.emoncms_connected() ? 'Yes' : 'No'"></span></b></span>
               <span data-bind="visible: config.emoncms_enabled() &amp;&amp; 1 === status.emoncms_connected()"><b>&nbsp; Successful posts:&nbsp;<span data-bind="text: status.packets_success"></span></b></span>
             </p>
@@ -328,7 +345,7 @@
               <input data-bind="textInput: config.mqtt_grid_ie, enable: '' === config.mqtt_solar()" type="text" autocapitalize="none" hint="emon/emonpi/power1"><br>
               <span class="small-text">Grid (+I/-E) MQTT topic to modulate charge rate based on <b>excess power</b></span>
             </p>
-              <button data-bind="click: saveMqtt, text: (saveMqttFetching() ? 'Saving' : (saveMqttSuccess() ? 'Saved' : 'Save')), disable: saveMqttFetching">Save</button>
+              <button class="button color1 round" data-bind="click: saveMqtt, text: (saveMqttFetching() ? 'Saving' : (saveMqttSuccess() ? 'Saved' : 'Save')), disable: saveMqttFetching">Save</button class="button color1 round">
               <span data-bind="visible: config.mqtt_enabled"><b>&nbsp; Connected:&nbsp;<span data-bind="text: 1 === status.mqtt_connected() ? 'Yes' : 'No'"></span></b></span>
             </p>
           </div>
@@ -361,7 +378,7 @@
               <b>Key: </b>OpnEoVse
             </p>
             <p>
-              <button data-bind="click: saveOhmKey, text: (saveOhmKeyFetching() ? 'Saving' : (saveOhmKeySuccess() ? 'Saved' : 'Save')), disable: saveOhmKeyFetching">Save</button>
+              <button class="button color1 round" data-bind="click: saveOhmKey, text: (saveOhmKeyFetching() ? 'Saving' : (saveOhmKeySuccess() ? 'Saved' : 'Save')), disable: saveOhmKeyFetching">Save</button class="button color1 round">
             </p>
           </div>
         </div>
@@ -411,8 +428,8 @@
             <h2>Charge Options</h2>
 
             <p data-bind="with: openevse, visible: !openevse.isError()">
-              <button data-bind="click: setStatus.bind($data, 'enable'), visible: !isEnabled()">Start</button>
-              <button data-bind="click: setStatus.bind($data, 'sleep'), visible: !isSleeping()">Pause</button>
+              <button class="button color1 round" data-bind="click: setStatus.bind($data, 'enable'), visible: !isEnabled()">Start</button class="button color1 round">
+              <button class="button color1 round" data-bind="click: setStatus.bind($data, 'sleep'), visible: !isSleeping()">Pause</button class="button color1 round">
             </p>
             <hr>
             <p data-bind="with: openevse">
@@ -441,15 +458,15 @@
                 &nbsp;&nbsp;
                 Stop: <input type="time" data-bind="value: delayTimerStop, disable: isError" /><br/>
                 <br>
-                <button data-bind="text: delayTimerEnabled() ? 'Update' : 'Set',
+                <button class="button color1 round" data-bind="text: delayTimerEnabled() ? 'Update' : 'Set',
                                    enable: !updatingDelayTimer() &amp;&amp;
                                            delayTimerValid() &amp;&amp;
                                            !isError(),
-                                   click: startDelayTimer">Set</button>
-                <button data-bind="visible: delayTimerEnabled(),
+                                   click: startDelayTimer">Set</button class="button color1 round">
+                <button class="button color1 round" data-bind="visible: delayTimerEnabled(),
                                    enable: !updatingDelayTimer() &amp;&amp;
                                            !isError(),
-                                   click: stopDelayTimer">Cancel</button>
+                                   click: stopDelayTimer">Cancel</button class="button color1 round">
             </div>
           </div>
 
@@ -569,9 +586,9 @@
               </label>
               <span data-bind="css: {selected: automaticTime() }">Automatic<span>
 
-              <button style="margin-left: 30px" data-bind="click: setTime">Update</button>
+              <button class="button color1 round" style="margin-left: 30px" data-bind="click: setTime">Update</button class="button color1 round">
             </div>
-            <hr>
+            <br/><hr>
             <p>
               <b>Service Level:</b><br/>
               <select data-bind="options: serviceLevels,
@@ -636,7 +653,7 @@
             <h2>Safety<span class="info" data-bind="click: toggle.bind($data, showSafety)"></span></h2>
 
             <div class="box" data-bind="visible: showSafety()">
-              Hardware safety checks. Enable dev mode (System > Developer Mode) to enable/disable or use the physical LCD + menu button.
+              Hardware safety checks. Enable dev mode (System > Developer Mode) to enable/disable or use the physical LCD + menu button class="button color1 round".
             </div>
 
 
@@ -747,7 +764,7 @@
               </tr>
               <tr>
                 <td colspan="2" data-bind="with: openevse">
-                  <button data-bind="click: restart, text: (restartFetching() ? 'Restarting...' : 'Restart'), disable: restartFetching">Restart</button>
+                  <button class="button color1 round" data-bind="click: restart, text: (restartFetching() ? 'Restarting...' : 'Restart'), disable: restartFetching">Restart</button class="button color1 round">
                 </td>
               </tr>
               <tr>
@@ -768,7 +785,7 @@
               </tr>
               <tr>
                 <td colspan="2">
-                  <button data-bind="click: restart, text: (restartFetching() ? 'Restarting...' : 'Restart'), disable: restartFetching">Restart</button>
+                  <button class="button color1 round" data-bind="click: restart, text: (restartFetching() ? 'Restarting...' : 'Restart'), disable: restartFetching">Restart</button class="button color1 round">
                 </td>
               </tr>
             </table>
@@ -799,7 +816,7 @@
                 <input type="text" autocapitalize="none" name='rapi' length='32' data-bind="textInput: cmd" />
               </p>
               <p>
-                <button data-bind="click: send, disable: rapiSend">Send</button>
+                <button class="button color1 round" data-bind="click: send, disable: rapiSend">Send</button class="button color1 round">
               </p>
               <p data-bind="text: ret"></p>
             </form>

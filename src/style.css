@@ -42,7 +42,7 @@ tr:nth-child(2n+2) {
 }
 
 .wifiselected td {
-  background-color: teal;
+  background-color: #03a9f4;
   color: white;
 }
 
@@ -52,7 +52,7 @@ tr:nth-child(2n+2) {
 
 .header h1 {
   padding-bottom: 0.3em;
-  color: #008080;
+  color: #03a9f4;
   font-size: 45px;
   font-weight: normal;
   font-family: Garmond,"sans-serif";
@@ -164,22 +164,6 @@ h2 {
   }
 }
 
-button {
-  background-color: #008080;
-  border-radius: 5px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.4);
-  border: none;
-  color: #ffffff;
-  padding: 10px 28px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1em;
-  margin: 4px 2px;
-  cursor: pointer;
-  outline: none;
-}
-
 button:disabled {
   background-color: #eee;
   color: #ccc;
@@ -201,7 +185,6 @@ select {
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-top: 10px;
-  width: 280px;
   padding:5px;
 }
 
@@ -282,7 +265,7 @@ input[type="time"] {
 }
 
 .tabs label {
-  background: #008080;
+  background: #03a9f4;
   border-radius: 5px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.4);
   color: #fff;
@@ -378,7 +361,9 @@ input[type="time"] {
   vertical-align: -40%;
 }
 
-.switch input {display:none;}
+.switch input {
+  display:none !important;
+}
 
 .slider {
   position: absolute;
@@ -405,11 +390,11 @@ input[type="time"] {
 }
 
 input:checked + .slider {
-  background-color: #008080;
+  background-color: #03a9f4;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #008080;
+  box-shadow: 0 0 1px #03a9f4;
 }
 
 input:checked + .slider:before {
@@ -428,7 +413,7 @@ input:checked + .slider:before {
 }
 
 .info {
-  background-color: #008080;
+  background-color: #03a9f4;
   border-radius: 100%;
   color: #ffffff;
   display: inline-block;
@@ -449,7 +434,7 @@ input:checked + .slider:before {
 
 span.selected
 {
-  color: #008080;
+  color: #03a9f4;
 }
 
 .ready {
@@ -509,7 +494,7 @@ border: none;
 #progressBar {
   width: 1%;
   height: 30px;
-  background-color: #008080;
+  background-color: #03a9f4;
 }
 
 #wifiList {
@@ -541,8 +526,8 @@ border: none;
 .list-group-item.active {
     z-index: 2;
     color: #fff;
-    background-color: teal;
-    border-color: teal;
+    background-color: #03a9f4;
+    border-color: #03a9f4;
 }
 
 .list-group-item:first-child {
