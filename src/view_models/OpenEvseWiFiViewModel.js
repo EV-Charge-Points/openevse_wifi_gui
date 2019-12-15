@@ -60,19 +60,16 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
     flag(!flag());
   };
 
-  // Advanced mode
-  self.advancedMode = ko.observable(false);
-  self.advancedMode.subscribe(function (val) {
-    self.setCookie("advancedMode", val.toString());
+  // Engineering mode
+  self.engineeringMode = ko.observable(false);
+  self.engineeringMode.subscribe(function (val) {
+    self.setCookie("engineeringMode", val.toString());
   });
 
-  // Developer mode
-  self.developerMode = ko.observable(false);
-  self.developerMode.subscribe(function (val) {
-    self.setCookie("developerMode", val.toString());
-    if(val) {
-      self.advancedMode(true); // Enabling dev mode implicitly enables advanced mode
-    }
+  // Services mode
+  self.servicesMode = ko.observable(false);
+  self.servicesMode.subscribe(function (val) {
+    self.setCookie("servicesMode", val.toString());
   });
 
   var updateTimer = null;
@@ -94,6 +91,7 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
   self.isServices = ko.pureComputed(function() { return "services" === self.tab(); });
   self.isStatus = ko.pureComputed(function() { return "status" === self.tab(); });
   self.isRapi = ko.pureComputed(function() { return "rapi" === self.tab(); });
+  self.isEngineering = ko.pureComputed(function() { return "engineering" === self.tab(); });
 
   // Upgrade URL
   self.upgradeUrl = ko.observable("about:blank");
@@ -146,8 +144,8 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
     });
 
     // Set the advanced and developer modes from Cookies
-    self.advancedMode(self.getCookie("advancedMode", "false") === "true");
-    self.developerMode(self.getCookie("developerMode", "false") === "true");
+    self.engineeringMode(self.getCookie("engineeringMode", "false") === "true");
+    self.servicesMode(self.getCookie("servicesMode", "false") === "true");
   };
 
   self.finishedStarting = function () {
