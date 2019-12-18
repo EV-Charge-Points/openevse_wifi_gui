@@ -9,4 +9,5 @@ import "../assets/wifi_signal_2.svg";
 import "../assets/wifi_signal_3.svg";
 import "../assets/wifi_signal_4.svg";
 import "../assets/wifi_signal_5.svg";
+import "../assets/bars.svg";
 import "../assets/logo.png";

@@ -22,7 +22,7 @@
   $(function () {
   // Activates knockout.js
     var openevse = new OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol);
-    ko.applyBindings(openevse);
+    ko.applyBindings(openevse, document.documentElement);
     openevse.start();
   });
 

@@ -93,6 +93,15 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
   self.isRapi = ko.pureComputed(function() { return "rapi" === self.tab(); });
   self.isEngineering = ko.pureComputed(function() { return "engineering" === self.tab(); });
 
+  // Mobile Menu
+  self.isMenuOpen = ko.observable(false);
+  self.menuOpen = function() {
+    self.isMenuOpen(true);
+  };
+  self.menuClose = function() {
+    self.isMenuOpen(false);
+  };
+
   // Upgrade URL
   self.upgradeUrl = ko.observable("about:blank");
 

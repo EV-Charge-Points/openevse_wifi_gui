@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="en" class="has-offscreen" data-bind="css: { 'offcanvas-opened': isMenuOpen }">
 
 <head>
 
@@ -17,7 +17,7 @@
 
 </head>
 
-<body>
+<body data-bind="click: menuClose">
   <div id="page">
     <div class="navigation-bar coloured-nav homepage">
       <div class="navigation-wrapper">
@@ -42,9 +42,9 @@
                 </li>
               </ul>
             </div>
-            <a href="#" data-component="offcanvas" data-target="#offcanvas-wrapper" data-direction="right" data-width="300px" data-push="false" data-loaded="true">
+            <a data-bind="click: menuOpen, clickBubble: false" data-component="offcanvas" data-target="#offcanvas-wrapper" data-direction="right" data-width="300px" data-push="false" data-loaded="true">
               <div class="bubble"></div>
-              <i class="fa fa-bars"></i>
+              <img src="bars.svg" />
             </a>
           </div>
         </div>
@@ -207,7 +207,7 @@
               <button class="button color1 round" style="margin-left: 30px" data-bind="click: setTime">Update</button class="button color1 round">
             </div>
           </div>
-          
+
           <div class="box380 left" data-bind="visible: engineeringMode()">
             <h2>Advanced Settings</h2>
             <p>
@@ -445,7 +445,7 @@
 
           <div data-bind="visible: !status.rapi_connected()" class="box box-full left error">
             <h4>EVSE Error</h4>
-            <span>EVCP not responding or not connected</span>
+            <span>EVCP internal error, not responding or not connected</span>
           </div>
 
           <div data-bind="visible: !openevse.isError() &amp;&amp; status.rapi_connected(),
@@ -866,7 +866,7 @@
               </tr>
             </table>
           </div>
-          
+
           <!-- Current -->
           <div class="box380 right" data-bind="visible: engineeringMode() &amp;&amp; status.rapi_connected()">
             <h2>Current</h2>
@@ -927,7 +927,7 @@
                                   css: { saved: savedCurrentCapacity }"></select>
             </p>
           </div>
-   
+
           <!-- Hardware -->
           <div class="box380 right" data-bind="visible: engineeringMode() &amp;&amp; status.rapi_connected()">
             <h2>Hardware</h2>
@@ -972,7 +972,7 @@
               </tr>
             </table>
           </div>
-       
+
         </div>
         <!--end TAB 4-->
 
@@ -986,6 +986,33 @@
       </div>
     </div>
     <!--end container -->
+  </div>
+
+  <div id="offcanvas-wrapper" class="offcanvas-right offcanvas" data-bind="visible: isMenuOpen" style="display: none">
+    <div class="offcanvas-top">
+      <div class="logo-holder">
+        <a class="logo-link dark" rel="home" itemprop="url" data-bind="click: menuClose" ><img width="546"
+            height="276"
+            src="logo.png"
+            class="logo dark" alt="" itemprop="logo"></a>
+      </div>
+    </div>
+    <div id="offcanvas-menu" class="menu-main-menu-container">
+      <ul id="offcanvas_menu" class="offcanvas_menu">
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isStatus}">
+          <a href="#status" data-bind="click: () => { tab('status'); menuClose() }">Charge Point</a>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isSystem}">
+          <a href="#system" data-bind="click: () => { tab('system'); menuClose() }">System</a>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isServices}, visible: servicesMode()">
+          <a href="#services" data-bind="click: () => { tab('services'); menuClose() }">Service</a>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isEngineering}, visible: engineeringMode()">
+          <a href="#engineering" data-bind="click: () => { tab('engineering'); menuClose() }">Engineering</a>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <!--end page -->

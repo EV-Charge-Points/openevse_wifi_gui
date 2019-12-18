@@ -5736,7 +5736,8 @@ img.custom-logo, img.logo.dark {
 
 #offcanvas-wrapper, .site {
   -webkit-box-direction: normal;
-  -webkit-box-orient: vertical
+  -webkit-box-orient: vertical;
+  width: 300px
 }
 
 .comment-author .sidebar .fn, .comment-metadata, .contact-form-wrapper input[type=submit], .content-placeholder-p, .footer-7 .widgettitle, .footer-7 h4, .sidebar .comment-author .fn, .sidebar h5, .tags-list a {
@@ -5787,14 +5788,14 @@ html.has-offscreen.offcanvas-opened body:after {
   opacity: .3
 }
 
-.main_menu_col [data-component=offcanvas] i.fa {
-  font-size: 1.1rem;
-  line-height: 2.5rem;
-  height: 2.5rem;
-  width: 2.5rem;
+.main_menu_col [data-component=offcanvas] img {
+  height: 1rem;
+  width: 1rem;
   text-align: center;
   position: relative;
-  z-index: 1
+  z-index: 1;
+  vertical-align: -.525em;
+  left: .67em;
 }
 
 #offcanvas-wrapper {
