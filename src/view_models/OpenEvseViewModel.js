@@ -471,10 +471,10 @@ function OpenEvseViewModel(baseEndpoint, statusViewModel) {
     });
   };
 
-  // Support for restarting the OpenEVSE
+  // Support for restarting the EVCP
   self.restartFetching = ko.observable(false);
   self.restart = function() {
-    if (confirm("Restart OpenEVSE? Current config will be saved, takes approximately 10s.")) {
+    if (confirm("Restart EVCP? Current config will be saved, takes approximately 10s.")) {
       self.restartFetching(true);
       self.openevse.reset().always(function () {
         self.restartFetching(false);
