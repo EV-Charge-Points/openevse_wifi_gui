@@ -17,7 +17,7 @@
 
 </head>
 
-<body data-bind="click: menuClose">
+<body>
   <div id="page">
     <div class="navigation-bar coloured-nav homepage">
       <div class="navigation-wrapper">
@@ -985,10 +985,10 @@
     <!--end container -->
   </div>
 
-  <div id="offcanvas-wrapper" class="offcanvas-right offcanvas" data-bind="visible: isMenuOpen" style="display: none">
+  <div id="offcanvas-wrapper" class="offcanvas-right offcanvas" data-bind="click: menuClose, visible: isMenuOpen" style="display: none">
     <div class="offcanvas-top">
       <div class="logo-holder">
-        <a class="logo-link dark" rel="home" itemprop="url" data-bind="click: menuClose" ><img width="546"
+        <a class="logo-link dark" rel="home" itemprop="url"><img width="546"
             height="276"
             src="logo.png"
             class="logo dark" alt="" itemprop="logo"></a>
@@ -997,16 +997,16 @@
     <div id="offcanvas-menu" class="menu-main-menu-container">
       <ul id="offcanvas_menu" class="offcanvas_menu">
         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isStatus}">
-          <a href="#status" data-bind="click: () => { tab('status'); menuClose() }">Charge Point</a>
+          <a href="#status" data-bind="click: () => { tab('status') }">Charge Point</a>
         </li>
         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isSystem}">
-          <a href="#system" data-bind="click: () => { tab('system'); menuClose() }">System</a>
+          <a href="#system" data-bind="click: () => { tab('system') }">System</a>
         </li>
         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isServices}, visible: servicesMode()">
-          <a href="#services" data-bind="click: () => { tab('services'); menuClose() }">Service</a>
+          <a href="#services" data-bind="click: () => { tab('services') }">Service</a>
         </li>
         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home" data-bind="css: {'current-menu-item': isEngineering}, visible: engineeringMode()">
-          <a href="#engineering" data-bind="click: () => { tab('engineering'); menuClose() }">Engineering</a>
+          <a href="#engineering" data-bind="click: () => { tab('engineering') }">Engineering</a>
         </li>
       </ul>
     </div>
