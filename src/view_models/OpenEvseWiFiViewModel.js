@@ -61,9 +61,9 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
   };
 
   // Engineering mode
-  self.engineeringMode = ko.observable(false);
-  self.engineeringMode.subscribe(function (val) {
-    self.setCookie("engineeringMode", val.toString());
+  self.engineeringPin = ko.observable("");
+  self.engineeringMode = ko.computed(function () {
+    return "8844" === self.engineeringPin();
   });
 
   // Services mode
@@ -153,7 +153,7 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
     });
 
     // Set the advanced and developer modes from Cookies
-    self.engineeringMode(self.getCookie("engineeringMode", "false") === "true");
+    //self.engineeringMode(self.getCookie("engineeringMode", "false") === "true");
     self.servicesMode(self.getCookie("servicesMode", "false") === "true");
   };
 
