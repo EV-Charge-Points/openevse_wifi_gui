@@ -491,7 +491,7 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
   self.restartFetching = ko.observable(false);
   self.restartSuccess = ko.observable(false);
   self.restart = function() {
-    if (confirm("Restart OpenEVSE WiFi? Current config will be saved, takes approximately 10s.")) {
+    if (confirm("Restart EVCP WiFi? Current config will be saved, takes approximately 10s.")) {
       self.restartFetching(true);
       self.restartSuccess(false);
       $.post(self.baseEndpoint() + "/restart", { }, function () {

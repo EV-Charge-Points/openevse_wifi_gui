@@ -1,7 +1,7 @@
 {
   "name": "openevse_wifi_gui",
   "version": "1.0.0",
-  "description": "GUI for the OpenEVSE WiFi module",
+  "description": "GUI for the EVCP WiFi module",
   "dependencies": {
     "jquery": "^3.4.1",
     "knockout": "^3.5.0",
