@@ -42,7 +42,10 @@ function ConfigViewModel(baseEndpoint) {
     "tempt": 0,
     "scale": 1,
     "offset": 0,
-    "version": "0.0.0"
+    "version": "0.0.0",
+    "unit_cost_value": 0.14,
+    "unit_cost_local": "en-GB",
+    "unit_cost_code": "GBP",
   }, endpoint);
 }
 ConfigViewModel.prototype = Object.create(BaseViewModel.prototype);

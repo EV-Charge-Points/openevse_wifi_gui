@@ -1,4 +1,4 @@
-/* global $, ko, ConfigViewModel, StatusViewModel, RapiViewModel, WiFiScanViewModel, WiFiConfigViewModel, OpenEvseViewModel, PasswordViewModel */
+/* global $, ko, ConfigViewModel, StatusViewModel, RapiViewModel, WiFiScanViewModel, WiFiConfigViewModel, OpenEvseViewModel, PasswordViewModel, scaleString */
 /* exported OpenEvseWiFiViewModel */
 
 function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
@@ -110,6 +110,33 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
   self.emoncmsApiKey = new PasswordViewModel(self.config.emoncms_apikey);
   self.mqttPassword = new PasswordViewModel(self.config.mqtt_pass);
   self.wwwPassword = new PasswordViewModel(self.config.www_password);
+
+  // Energy
+  self.session_kwh = ko.computed(() => {
+    return scaleString(self.status.wattsec(), 3600000, 2);
+  });
+  self.total_kwh = ko.computed(() => {
+    return scaleString(self.status.watthour(), 1000, 2);
+  });
+
+  // Costs
+  self.sessionCost = ko.computed(() => {
+    const formatter = new Intl.NumberFormat(self.config.unit_cost_local(), {
+      style: "currency",
+      currency: self.config.unit_cost_code()
+    })
+
+    return formatter.format(self.session_kwh() * self.config.unit_cost_value());
+  });
+
+  self.totalCost = ko.computed(() => {
+    const formatter = new Intl.NumberFormat(self.config.unit_cost_local(), {
+      style: "currency",
+      currency: self.config.unit_cost_code()
+    })
+
+    return formatter.format(self.total_kwh() * self.config.unit_cost_value());
+  });
 
   // -----------------------------------------------------------------------
   // Initialise the app
@@ -393,6 +420,27 @@ function OpenEvseWiFiViewModel(baseHost, basePort, baseProtocol)
       alert("Failed to save Ohm key config");
     }).always(function () {
       self.saveOhmKeyFetching(false);
+    });
+  };
+
+  // -----------------------------------------------------------------------
+  // Event: Save Unit Cost settings
+  // -----------------------------------------------------------------------
+  self.saveUnitCostFetching = ko.observable(false);
+  self.saveUnitCostSuccess = ko.observable(false);
+  self.saveUnitCost = function () {
+    self.saveUnitCostFetching(true);
+    self.saveUnitCostSuccess(false);
+    $.post(self.baseEndpoint() + "/saveunitcost", {
+      local: "en-GB",
+      code: "GBP",
+      cost: self.config.unit_cost_value()
+    }, function () {
+      self.saveUnitCostSuccess(true);
+    }).fail(function () {
+      alert("Failed to save Unit cost config");
+    }).always(function () {
+      self.saveUnitCostFetching(false);
     });
   };
 

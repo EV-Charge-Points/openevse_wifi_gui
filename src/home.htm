@@ -186,26 +186,36 @@
           </div>
 
           <!-- Settings -->
-          <div class="box380 left setup" data-bind="visible: $root.status.rapi_connected, with: openevse">
+          <div class="box380 left setup" data-bind="visible: status.rapi_connected">
             <h2>Setup</h2>
-            <p data-bind="with: time, visible: !time.hasRTC()">
+            <p data-bind="with: openevse.time, visible: !openevse.time.hasRTC()">
               <b>Time: No RTC detected</b>
             </p>
-            <p data-bind="with: time, visible: time.hasRTC()">
+            <p data-bind="with: openevse.time, visible: openevse.time.hasRTC()">
               <b>Time:</b><br/>
               <input type="date" data-bind="value: date, disable: automaticTime" />
               <input type="time" data-bind="value: time, disable: automaticTime" /><br/>
             </p>
-            <div data-bind="with: time, visible: time.hasRTC()">
+
+            <div data-bind="with: openevse.time, visible: openevse.time.hasRTC()">
               <span data-bind="css: {selected: !automaticTime() }">Manual</span>
               <label class="switch">
                 <input type="checkbox" data-bind="checked: automaticTime" />
                 <div class="slider round"></div>
               </label>
               <span data-bind="css: {selected: automaticTime() }">Automatic<span>
-
-              <button class="button color1 round" style="margin-left: 30px" data-bind="click: setTime">Update</button class="button color1 round">
+              <button class="button color1 round" style="margin-left: 30px" data-bind="click: setTime">Update</button>
             </div>
+
+            <h2>Energy Cost</h2>
+            <p>
+              <b>Unit cost:</b><br/>
+              <input type="number" data-bind="textInput: config.unit_cost_value" step="0.01" />
+            </p>
+            <p>
+              <button class="button color1 round" data-bind="click: saveUnitCost, text: (saveUnitCostFetching() ? 'Saving' : (saveUnitCostSuccess() ? 'Saved' : 'Save')), disable: saveAdvancedFetching">Save</button class="button color1 round">
+            </p>
+
           </div>
 
           <div class="box380 left" data-bind="visible: engineeringMode()">
@@ -458,13 +468,13 @@
               <tr>
                 <th>Current</th>
                 <th>Energy</th>
-                <th>Temp</th>
+                <th>Cost</th>
                 <th>Elapsed</th>
               </tr>
               <tr>
                 <td><span data-bind="text: scaleString(status.amp(), 1000, 2) + ' A'"></span></td>
-                <td><span data-bind="text: scaleString(status.wattsec(), 3600000, 2) + ' kWh'"></span></td>
-                <td><span data-bind="text: scaleString(status.temp1(), 10, 1) + ' &deg;C'"></span></td>
+                <td><span data-bind="text: session_kwh() + ' kWh'"></span></td>
+                <td><span data-bind="text: sessionCost"></span></td>
                 <td><span data-bind="text: openevse.time.elapsed"></span></td>
               </tr>
             </table>
@@ -524,14 +534,17 @@
               <tr>
                 <th>Energy</th>
                 <th></th>
+                <th></th>
               </tr>
               <tr>
                 <td>This Session:</td>
-                <td><span data-bind="text: scaleString(status.wattsec(), 3600000, 2)+ ' kWh'"></span></td>
+                <td><span data-bind="text: session_kwh() + ' kWh'"></span></td>
+                <td><span data-bind="text: sessionCost"></span></td>
               </tr>
               <tr>
                 <td>Total:</td>
-                <td><span data-bind="text: scaleString(status.watthour(), 1000, 2)+ ' kWh'"></span></td>
+                <td><span data-bind="text: total_kwh() + ' kWh'"></span></td>
+                <td><span data-bind="text: totalCost"></span></td>
               </tr>
             </table>
           </div>
